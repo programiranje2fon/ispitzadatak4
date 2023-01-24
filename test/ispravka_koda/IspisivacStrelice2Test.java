@@ -1,5 +1,6 @@
 package ispravka_koda;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayOutputStream;
@@ -48,9 +49,11 @@ public class IspisivacStrelice2Test {
 	@Test
 	public void metoda_ispisiStrelicu2() {
 		IspisivacStrelice2.ispisiStrelicu2();
-		String ispis = outContent.toString();
-		String ocekivano = pomocna();
-		assertTrue("Nakon izvrsetka metode ispisiStrelicu2 ispisano je \n" + ispis + "\nUmesto\n" + ocekivano + "\n",
-				ocekivano.equals(ispis));
+		assertEquals("  0  " + System.lineSeparator() +
+				"  0  " + System.lineSeparator() + 
+				"  0  " + System.lineSeparator() + 
+				"0 0 0" + System.lineSeparator() + 
+				" 000 " + System.lineSeparator() + 
+				"  0  " + System.lineSeparator(), outContent.toString());
 	}
 }

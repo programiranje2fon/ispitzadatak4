@@ -11,6 +11,9 @@ import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
 import ispravka_koda.IspisivacStrelice2Test;
+import vodostaj.VodostajGUI;
+import vodostaj.VodostajGUITest;
+import vodostaj.reka.RekaTest;
 
 
 
@@ -18,6 +21,9 @@ public class PokreniTestove {
 
 	public static void main(String[] args) {
 		runTestsForClass(IspisivacStrelice2Test.class);
+	
+		runTestsForClass(RekaTest.class);
+		runTestsForClass(VodostajGUITest.class);
 	}
 
 	/**
@@ -132,6 +138,7 @@ public class PokreniTestove {
 							i++, className, methodName);
 				} else {
 					String[] methodNameElements = failure.getDescription().getMethodName().split("_");
+					System.out.println(failure.getDescription().getMethodName());
 					String methodName = methodNameElements[1];
 					String testVariantName = null;
 
