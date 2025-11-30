@@ -16,7 +16,7 @@ Napraviti vizuelnu klasu **VodostajGUI** u paketu **vodostaj** koja izgleda kao 
 * Kada se pritisne dugme “Prikaži sve”, potrebno je u editoru ispisati sve podatke o svakoj reci iz niza. U prvom redu ispisati reč “VODOSTAJ” a onda podatke o svakoj reci ispisati u posebnom redu. Obratiti pažnju na prazna mesta u nizu. Na kraju ispisati i naziv reke sa najvišim vodostajem.
 * Kada se pritisne dugme “Izveštaj”, potrebno je u tekstualni fajl “izveštaj.txt” upisati podatke o onim rekama iz niza u kojima je vodostaj u odnosu na prethodno merenje porastao za više od metar. Računati na to da se u nizu nalaze podaci iz samo dva poslednja merenja za svaku reku. Sam redosled ovih podataka o merenju u nizu nije definisan. Obratiti pažnju na prazna mesta u nizu.
 
-![Alt text](../images/VodostajGUI.jpg)
+![Alt text](../images/VodostajGUI.JPG)
 
 #Zadatak 4 - Ispravka koda 
 U produžetku teksta je dat kod klase sa metodom koja bi trebalo da, na ekranu, ispisuje strelicu od znakova
