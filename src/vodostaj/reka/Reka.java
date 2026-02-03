@@ -1,12 +1,12 @@
 package vodostaj.reka;
 
 import java.io.Serializable;
-import java.util.GregorianCalendar;
+import java.time.LocalDate;
 
 public class Reka implements Serializable {
 	
 	private String naziv=null;
-	private GregorianCalendar datumMerenja;
+	private LocalDate datumMerenja;
 	private double vodostaj=-1;
 	
 	public String getNaziv() {
@@ -19,12 +19,12 @@ public class Reka implements Serializable {
 		this.naziv = naziv;
 	}
 	
-	public GregorianCalendar getDatumMerenja() {
+	public LocalDate getDatumMerenja() {
 		return datumMerenja;
 	}
 	
-	public void setDatumMerenja(GregorianCalendar datumMerenja) {
-		if (datumMerenja == null || datumMerenja.after(new GregorianCalendar()))
+	public void setDatumMerenja(LocalDate datumMerenja) {
+		if (datumMerenja == null || datumMerenja.isAfter(LocalDate.now()))
 			throw new RuntimeException("Datum merenja se mora uneti i mora se odnositi na prosli trenutak");
 		this.datumMerenja = datumMerenja;
 	}
@@ -41,7 +41,7 @@ public class Reka implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "Reka [naziv=" + naziv + ", datumMerenja=" + datumMerenja.getTime() + ", vodostaj=" + vodostaj + "]";
+		return "Reka [naziv=" + naziv + ", datumMerenja=" + datumMerenja + ", vodostaj=" + vodostaj + "]";
 	}
 	
 	

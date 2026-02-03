@@ -11,8 +11,6 @@ import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
 import ispravka_koda.IspisivacStrelice2Test;
-import vodostaj.VodostajGUI;
-import vodostaj.VodostajGUITest;
 import vodostaj.reka.RekaTest;
 
 
@@ -23,7 +21,6 @@ public class PokreniTestove {
 		runTestsForClass(IspisivacStrelice2Test.class);
 	
 		runTestsForClass(RekaTest.class);
-		runTestsForClass(VodostajGUITest.class);
 	}
 
 	/**

@@ -5,6 +5,7 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Modifier;
+import java.time.LocalDate;
 import java.util.GregorianCalendar;
 
 import org.junit.After;
@@ -107,7 +108,7 @@ public class RekaTest {
 	@Test
 	public void metoda_setDatumMerenja_vidljivost() {
 		assertTrue("Metoda setDatumMerenja nije javna", TestUtil.hasMethodModifier(Reka.class, "setDatumMerenja",
-				new Class<?>[] { GregorianCalendar.class }, Modifier.PUBLIC));
+				new Class<?>[] { LocalDate.class }, Modifier.PUBLIC));
 	}
 	
 	@Test
@@ -118,7 +119,7 @@ public class RekaTest {
 
 	@Test
 	public void metoda_setDatumMerenja_buduciDatum() {
-		GregorianCalendar arg = new GregorianCalendar(new GregorianCalendar().get(GregorianCalendar.YEAR) + 1, 1, 1);
+        LocalDate arg = LocalDate.now().plusDays(1);
 		assertThrows(java.lang.RuntimeException.class,
 				() -> instance.setDatumMerenja(arg) );
 	}
@@ -144,8 +145,7 @@ public class RekaTest {
 	@Test
 	public void metoda_toString() {
 		String naziv = "Dunav";
-		GregorianCalendar datumMerenja = new GregorianCalendar(
-				new GregorianCalendar().get(GregorianCalendar.YEAR) - 1, 1, 1);
+        LocalDate datumMerenja = LocalDate.now().minusYears(1);
 		double vodostaj=4.1;
 		
 		instance.setNaziv(naziv);
@@ -157,9 +157,11 @@ public class RekaTest {
 		assertTrue("String koji vraca metoda to String ne sadrzi vrednost atributa naziv",
 				result.indexOf(instance.getNaziv()) != -1);
 		assertTrue("String koji vraca metoda to String ne sadrzi godinu merenja",
-				result.indexOf(((Integer) instance.getDatumMerenja().get(GregorianCalendar.YEAR)).toString()) != -1);
-		assertTrue("String koji vraca metoda to String ne sadrzi dan merenja",
-				result.indexOf(((Integer) instance.getDatumMerenja().get(GregorianCalendar.DAY_OF_MONTH)).toString()) != -1);
+				result.indexOf(datumMerenja.getYear()+"") != -1);
+        assertTrue("String koji vraca metoda to String ne sadrzi mesec merenja",
+                result.indexOf(datumMerenja.getMonthValue()+"") != -1);
+        assertTrue("String koji vraca metoda to String ne sadrzi dan merenja",
+				result.indexOf(datumMerenja.getDayOfMonth()+"") != -1);
 		assertTrue("String koji vraca metoda to String ne sadrzi vrednost atributa vodostaj",
 				result.indexOf(((Double)instance.getVodostaj()).toString()) != -1);
 	}

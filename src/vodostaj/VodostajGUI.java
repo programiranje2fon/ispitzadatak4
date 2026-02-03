@@ -1,341 +1,147 @@
 package vodostaj;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
 import vodostaj.reka.Reka;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
-import javax.swing.JButton;
-import javax.swing.DefaultComboBoxModel;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.GregorianCalendar;
-import java.awt.event.ActionEvent;
-import javax.swing.JTextArea;
+import java.time.LocalDate;
 
 public class VodostajGUI extends JFrame {
+    private JPanel mojPanel;
+    private JButton unesiButton;
+    private JButton prikaziSveButton;
+    private JButton izvestajButton;
+    private JTextArea textArea1;
+    private JTextField textFieldNaziv;
+    private JComboBox comboBoxDan;
+    private JComboBox comboBoxMesec;
+    private JComboBox comboBoxGodina;
+    private JTextField textFieldVodostaj;
 
-	private JPanel contentPane;
+    private Reka[] reke = new Reka[100];
 
-	private Reka[] reke = new Reka[100];
-	private JLabel lblNewLabel;
-	private JTextField txtNaziv;
-	private JLabel lblNewLabel_1;
-	private JLabel lblNewLabel_2;
-	private JLabel lblNewLabel_3;
-	private JComboBox cmbDan;
-	private JComboBox cmbMesec;
-	private JComboBox cmbGodina;
-	private JLabel lblNewLabel_4;
-	private JTextField txtVodostaj;
-	private JButton btnUnesi;
-	private JButton btnPrikaziSve;
-	private JButton btnIzvestaj;
-	private JTextArea textArea;
+    public VodostajGUI(){
+        setContentPane(mojPanel);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(650, 300);
+        setLocationRelativeTo(null);
+        setTitle("Vodostaj");
+        setResizable(false);
+        unesiButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Reka reka = new Reka();
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VodostajGUI frame = new VodostajGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+                // preuzimanje vrednosti sa polja za unos na ekranu
+                String naziv = textFieldNaziv.getText();
 
-	/**
-	 * Create the frame.
-	 */
-	public VodostajGUI() {
-		setTitle("Vodostaj");
-		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 432, 300);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+                int dan = Integer.parseInt((String) comboBoxDan.getSelectedItem());
+                int mesec = Integer.parseInt((String) comboBoxMesec.getSelectedItem());
+                int godina = Integer.parseInt((String) comboBoxGodina.getSelectedItem());
+                LocalDate datumMerenja = LocalDate.of(godina, mesec, dan);
 
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		contentPane.add(getLblNewLabel());
-		contentPane.add(getTxtNaziv());
-		contentPane.add(getLblNewLabel_1());
-		contentPane.add(getLblNewLabel_2());
-		contentPane.add(getLblNewLabel_3());
-		contentPane.add(getCmbDan());
-		contentPane.add(getCmbMesec());
-		contentPane.add(getCmbGodina());
-		contentPane.add(getLblNewLabel_4());
-		contentPane.add(getTxtVodostaj());
-		contentPane.add(getBtnUnesi());
-		contentPane.add(getBtnPrikaziSve());
-		contentPane.add(getBtnIzvestaj());
-		contentPane.add(getTextArea());
-	}
+                double vodostaj = Double.parseDouble(textFieldVodostaj.getText());
 
-	private JLabel getLblNewLabel() {
-		if (lblNewLabel == null) {
-			lblNewLabel = new JLabel("Naziv");
-			lblNewLabel.setBounds(10, 26, 71, 14);
-		}
-		return lblNewLabel;
-	}
+                // objekat se puni podacima
+                reka.setNaziv(naziv);
+                reka.setDatumMerenja(datumMerenja);
+                reka.setVodostaj(vodostaj);
 
-	private JTextField getTxtNaziv() {
-		if (txtNaziv == null) {
-			txtNaziv = new JTextField();
-			txtNaziv.setBounds(10, 51, 183, 20);
-			txtNaziv.setColumns(10);
-		}
-		return txtNaziv;
-	}
+                // ubacivanje na prvo slobodno mesto
+                for (int i = 0; i < reke.length; i++) {
+                    if (reke[i] == null) {
+                        reke[i] = reka;
+                        return;
+                    }
+                }
 
-	private JLabel getLblNewLabel_1() {
-		if (lblNewLabel_1 == null) {
-			lblNewLabel_1 = new JLabel("Dan");
-			lblNewLabel_1.setBounds(10, 82, 46, 14);
-		}
-		return lblNewLabel_1;
-	}
+                JOptionPane.showMessageDialog(null,
+                        "Nema mesta",
+                        "Greska",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        prikaziSveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                textArea1.setText(null);
 
-	private JLabel getLblNewLabel_2() {
-		if (lblNewLabel_2 == null) {
-			lblNewLabel_2 = new JLabel("Mesec");
-			lblNewLabel_2.setBounds(66, 82, 46, 14);
-		}
-		return lblNewLabel_2;
-	}
+                // u prvom redu je potrebno da pise rec VODOSTAJ
+                textArea1.append("VODOSTAJ" + System.lineSeparator());
 
-	private JLabel getLblNewLabel_3() {
-		if (lblNewLabel_3 == null) {
-			lblNewLabel_3 = new JLabel("Godina");
-			lblNewLabel_3.setBounds(122, 82, 46, 14);
-		}
-		return lblNewLabel_3;
-	}
+                // reka sa najvisim vodostajem
+                Reka maxReka = null;
 
-	private JComboBox getCmbDan() {
-		if (cmbDan == null) {
-			cmbDan = new JComboBox();
-			cmbDan.setModel(new DefaultComboBoxModel(new Object[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-					16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31 }));
-			cmbDan.setBounds(10, 107, 46, 22);
-		}
-		return cmbDan;
-	}
+                // krecemo od pocetka niza i za svaku reku proveravamo
+                // da li je uneta(razlicita od null), prva reka koja nije
+                // null ce biti reka sa najvisim vodostajem, a zatim se nastavlja do kraja niza
+                // svaki put kada se pronadje reka koja ima veci vodostaj od trenutne sa
+                // najvecim vodostajem,
+                // ona ce biti postati reka sa najvecim vodostajem
+                for (Reka reka : reke) {
+                    if (reka != null) {
+                        // ispisivanje podataka o svakoj reci u posebnom redu
+                        textArea1.append(reka + System.lineSeparator());
 
-	private JComboBox getCmbMesec() {
-		if (cmbMesec == null) {
-			cmbMesec = new JComboBox();
-			cmbMesec.setModel(new DefaultComboBoxModel(new Object[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 }));
-			cmbMesec.setBounds(66, 107, 46, 22);
-		}
-		return cmbMesec;
-	}
+                        if (maxReka == null || reka.getVodostaj() > maxReka.getVodostaj()) {
+                            maxReka = reka;
+                        }
+                    }
+                }
 
-	private JComboBox getCmbGodina() {
-		if (cmbGodina == null) {
-			cmbGodina = new JComboBox();
-			cmbGodina.setModel(new DefaultComboBoxModel(new Object[] { 2010, 2011, 2012, 2013, 2014, 2015 }));
-			cmbGodina.setBounds(122, 107, 71, 22);
-		}
-		return cmbGodina;
-	}
+                // ako je maxReka i dalje null
+                // znaci da nijedna reka nije uneta
+                // ako nije ispisujemo njen naziv u poslednjem redu
+                if (maxReka != null)
+                    textArea1.append(maxReka.getNaziv());
+                else
+                    textArea1.append("Jos uvek nije uneta nijedna reka");
+            }
+        });
+        izvestajButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String rezultat = "";
 
-	private JLabel getLblNewLabel_4() {
-		if (lblNewLabel_4 == null) {
-			lblNewLabel_4 = new JLabel("Vodostaj");
-			lblNewLabel_4.setBounds(10, 155, 89, 14);
-		}
-		return lblNewLabel_4;
-	}
+                // trazimo oba merenja za odredjenu reku, poredimo po nazivu reke
+                // kada se nadju oba merenja proverava se koje je merenje bilo prvo, a koje
+                // drugo
+                // u zavisnosti od toga proverava se da li porast vodostaja reke ispunjava uslov
+                // ako ispunjava dodajemo podatke o odredjenoj u pomocni String koji cemo
+                // upisati u tekstualni fajl
+                for (int i = 0; i < reke.length; i++) {
+                    for (int j = i + 1; j < reke.length; j++) {
+                        if (reke[i] != null && reke[j] != null && reke[i].getNaziv().equals(reke[j].getNaziv())) {
+                            double porastVodostaja = reke[j].getVodostaj() - reke[i].getVodostaj();
+                            if (reke[i].getDatumMerenja().isBefore(reke[j].getDatumMerenja())) {
+                                if (porastVodostaja >= 1) {
+                                    rezultat += reke[j] + System.lineSeparator();
+                                }
+                            } else {
+                                if (porastVodostaja <= -1) {
+                                    rezultat += reke[i] + System.lineSeparator();
+                                }
+                            }
+                        }
+                    }
+                }
+                try (PrintWriter out = new PrintWriter(
+                        new BufferedWriter(new FileWriter("izvestaj.txt")))){
 
-	private JTextField getTxtVodostaj() {
-		if (txtVodostaj == null) {
-			txtVodostaj = new JTextField();
-			txtVodostaj.setBounds(10, 180, 183, 20);
-			txtVodostaj.setColumns(10);
-		}
-		return txtVodostaj;
-	}
+                    out.print(rezultat);
 
-	private JButton getBtnUnesi() {
-		if (btnUnesi == null) {
-			btnUnesi = new JButton("Unesi");
-			btnUnesi.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+    }
 
-					Reka reka = new Reka();
-
-					// preuzimanje vrednosti sa polja za unos na ekranu
-					String naziv = txtNaziv.getText();
-
-					int dan = (int) cmbDan.getSelectedItem();
-					int mesec = (int) cmbMesec.getSelectedItem();
-					int godina = (int) cmbGodina.getSelectedItem();
-					GregorianCalendar datumMerenja = new GregorianCalendar(godina, mesec - 1, dan);
-
-					double vodostaj = Double.parseDouble(txtVodostaj.getText());
-
-					// objekat se puni podacima
-					reka.setNaziv(naziv);
-					reka.setDatumMerenja(datumMerenja);
-					reka.setVodostaj(vodostaj);
-
-					unesiReku(reka);
-				}
-
-			});
-			btnUnesi.setBounds(10, 227, 89, 23);
-		}
-		return btnUnesi;
-	}
-
-	private JButton getBtnPrikaziSve() {
-		if (btnPrikaziSve == null) {
-			btnPrikaziSve = new JButton("Prikaži sve");
-			btnPrikaziSve.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					String rezultat = prikaziSve();
-
-					textArea.setText(rezultat);
-				}
-
-			});
-			btnPrikaziSve.setBounds(144, 227, 134, 23);
-		}
-		return btnPrikaziSve;
-	}
-
-	private JButton getBtnIzvestaj() {
-		if (btnIzvestaj == null) {
-			btnIzvestaj = new JButton("Izveštaj");
-			btnIzvestaj.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-
-					try {
-						PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("izveštaj")));
-						String rezultat = napraviIzvestaj();
-						out.print(rezultat);
-						out.close();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-
-			});
-			btnIzvestaj.setBounds(317, 227, 89, 23);
-		}
-		return btnIzvestaj;
-	}
-
-	private JTextArea getTextArea() {
-		if (textArea == null) {
-			textArea = new JTextArea();
-			textArea.setBounds(215, 21, 191, 189);
-		}
-		return textArea;
-	}
-
-	@Override
-	public boolean isResizable() {
-		// TODO Auto-generated method stub
-		return super.isResizable();
-	}
-
-	public void unesiReku(Reka reka) {
-
-		// ubacivanje na prvo slobodno mesto
-		for (int i = 0; i < reke.length; i++) {
-			if (reke[i] == null) {
-				reke[i] = reka;
-				return;
-			}
-		}
-
-		// ovo ce se izvrsiti samo ako reka nije uneta, odnosno ako je niz pun
-		System.out.println("GRESKA");
-	}
-
-	public String prikaziSve() {
-		// pomocna promenljiva u koju cemo dodavati potrebne vrednosti
-		String rezultat = "";
-
-		// u prvom redu je potrebno da pise rec VODOSTAJ
-		rezultat += "VODOSTAJ\n";
-
-		// reka sa najvisim vodostajem
-		Reka maxReka = null;
-
-		// krecemo od pocetka niza i za svaku reku proveravamo
-		// da li je uneta(razlicita od null), prva reka koja nije
-		// null ce biti reka sa najvisim vodostajem, a zatim se nastavlja do kraja niza
-		// svaki put kada se pronadje reka koja ima veci vodostaj od trenutne sa
-		// najvecim vodostajem,
-		// ona ce biti postati reka sa najvecim vodostajem
-		for (Reka reka : reke) {
-			if (reka != null) {
-				// ispisivanje podataka o svakoj reci u posebnom redu
-				rezultat += reka + "\n";
-
-				if (maxReka == null || reka.getVodostaj() > maxReka.getVodostaj()) {
-					maxReka = reka;
-				}
-			}
-		}
-
-		// ako je maxReka i dalje null
-		// znaci da ni jedna reka nije uneta
-		// ako nije ispisujemo njen naziv u poslednjem redu
-		if (maxReka != null)
-			rezultat += maxReka.getNaziv();
-		else
-			rezultat += "Jos uvek nije uneta ni jedna reka";
-		return rezultat;
-	}
-
-	public String napraviIzvestaj() {
-
-		String rezultat = "";
-
-		// trazimo oba merenja za odredjenu reku, poredimo po nazivu reke
-		// kada se nadju oba merenja proverava se koje je merenje bilo prvo, a koje
-		// drugo
-		// u zavisnosti od toga proverava se da li porast vodostaja reke ispunjava uslov
-		// ako ispunjava dodajemo podatke o odredjenoj u pomocni String koji cemo
-		// upisati u tekstualni fajl
-		for (int i = 0; i < reke.length; i++) {
-			for (int j = i + 1; j < reke.length; j++) {
-				if (reke[i] != null && reke[j] != null && reke[i].getNaziv().equals(reke[j].getNaziv())) {
-					double porastVodostaja = reke[j].getVodostaj() - reke[i].getVodostaj();
-					if (reke[i].getDatumMerenja().before(reke[j].getDatumMerenja())) {
-						if (porastVodostaja >= 1) {
-							rezultat += reke[j] + "\n";
-						}
-					} else {
-						if (porastVodostaja <= -1) {
-							rezultat += reke[i] + "\n";
-						}
-					}
-				}
-			}
-		}
-
-		return rezultat;
-	}
-
+    public static void main(String[] args) {
+        new VodostajGUI().setVisible(true);
+    }
 }
